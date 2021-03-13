@@ -21,6 +21,8 @@
     "css-loader": "^4.3.0",
     "cypress": "^6.6.0",
     "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.11.0",
