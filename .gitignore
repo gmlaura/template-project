@@ -10,7 +10,6 @@ node_modules/
 build/
 copy-gm-projs.sh
 .DS_Store
-public/
 cypress/screenshots/
 cypress/videos/
 coverage/
