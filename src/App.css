@@ -1,1 +1,31 @@
+.mainContainer{
+    display: flex;
+}
 
+.listContainer{
+    margin: 20px;
+    border: 1px solid black;
+    padding: 5px;
+    width: 250px;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.listItem{
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid black;
+    height: 20px;
+    text-align: center;
+    background-color: lightgrey;
+}
+
+.detailContainer{
+    margin: 20px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.detailItem{
+    padding: 5px;
+}

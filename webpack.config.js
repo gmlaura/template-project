@@ -17,18 +17,11 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loader: 'style-loader',
-      },
-      {
-        test: /\.css$/,
         exclude: /(style.css|GLOBAL_CSS|node_modules)/,
-        loader: 'css-loader',
-        options: {
-          modules: {
-            mode: 'local',
-            localIdentName: '[path][name]__[local]--[hash:base64:5]',
-          }
-        }
+        use: [{loader: "style-loader"},
+            {
+          loader: 'css-loader',
+        }]
       },
       {
         test: /\.tsx?$/,
