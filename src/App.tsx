@@ -12,7 +12,7 @@ import {v4 as uuidv4} from "uuid";
 export interface User{
     name : string;
     address : string;
-    birthday : Date; // string or Date - date works fine with the data coming from faker!
+    birthday : string; // string or Date - date works fine with the data coming from faker but the date picker needs a different format!
     email : string;
     phone : string;
     id : string;
@@ -60,6 +60,36 @@ export const App = () => {
        setEditing(true);
     }
 
+    const handleEditSubmission = (e) => {
+       e.preventDefault();
+
+       let {name, address, birthday, email, phone} = e.target;
+
+       let editedUser = {
+           name: name.value,
+           address: address.value,
+           birthday: birthday.value,
+           email: email.value,
+           phone: phone.value,
+           id: selected.id
+       }
+
+       let newInfo = info.map(x => {
+           if(selected.id === x.id){
+               return editedUser;
+           }
+           return x;
+       })
+
+        setSelected(editedUser);
+        setInfo(newInfo);
+        setEditing(false);
+    }
+
+    const handleCancelEdit = () => {
+       setEditing(false);
+    }
+
   return (
     <div className="mainContainer">
         {
@@ -69,7 +99,11 @@ export const App = () => {
         }
         {
             selected ? (
-                editing ? (<EditUser />) : (<DetailedView item={selected} handleEditClicked={handleEditClicked}/>)
+                editing ? (
+                    <EditUser item={selected} handleEditSubmission={handleEditSubmission} handleCancelEdit={handleCancelEdit} />
+                    ) : (
+                        <DetailedView item={selected} handleEditClicked={handleEditClicked}/>
+                        )
             ) : null
         }
     </div>

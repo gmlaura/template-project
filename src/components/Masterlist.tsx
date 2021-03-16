@@ -17,7 +17,8 @@ export default function Masterlist(props: Props) {
         boxShadow: "10px 10px 21px 2px rgba(100,95,95,0.55)",
         maxHeight: "95vh",
         overflow: "auto",
-        width: 300
+        width: 300,
+        borderRadius: 3
     }
 
     return (
