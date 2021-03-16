@@ -4,6 +4,8 @@ import * as faker from "faker"
 import Masterlist from "./components/Masterlist";
 import DetailedView from "./components/DetailedView";
 import "./App.css";
+import EditUser from "./components/EditUser";
+import {v4 as uuidv4} from "uuid";
 
 // let styles = require("./App.css");
 
@@ -13,12 +15,14 @@ export interface User{
     birthday : Date; // string or Date - date works fine with the data coming from faker!
     email : string;
     phone : string;
+    id : string;
 }
 
 export const App = () => {
 
     const [info, setInfo] = useState<User[]>([]);
     const [selected, setSelected] = useState<User>(null);
+    const [editing, setEditing] =useState<boolean>(false);
 
    useEffect(() => {
        new Promise((resolve, reject) => {
@@ -31,14 +35,15 @@ export const App = () => {
                        address: faker.fake("{{address.streetAddress}}"),
                        birthday: faker.fake("{{date.past}}"),
                        email: faker.fake("{{internet.email}}"),
-                       phone: faker.fake("{{phone.phoneNumber}}")
+                       phone: faker.fake("{{phone.phoneNumber}}"),
+                       id: uuidv4()
                    }
                    dataArray.push(item);
                }
                resolve(dataArray)
            }, 1000)
        })
-           .then(data => {
+           .then((data : User[])=> {
                 setInfo(data);
            })
            .catch(err => {
@@ -47,8 +52,12 @@ export const App = () => {
    }, [])
 
 
-    const handleItemSelect = (item) => {
+    const handleItemSelect = (item:User) => {
        setSelected(item);
+    }
+
+    const handleEditClicked = () => {
+       setEditing(true);
     }
 
   return (
@@ -60,7 +69,7 @@ export const App = () => {
         }
         {
             selected ? (
-                <DetailedView item={selected}/>
+                editing ? (<EditUser />) : (<DetailedView item={selected} handleEditClicked={handleEditClicked}/>)
             ) : null
         }
     </div>
