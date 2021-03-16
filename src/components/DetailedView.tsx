@@ -1,6 +1,11 @@
 import * as React from 'react'
+import {User} from "../App";
 
-export default function DetailedView(props){
+interface Props{
+    item : User
+}
+
+export default function DetailedView(props:Props){
     let {item} = props;
 
     return(

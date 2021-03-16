@@ -7,7 +7,7 @@ export default function Masterlist(props){
     return (
         <div className="listContainer">
             {info.map((elem, i) => {
-                return <ListItem item={elem} key={i} onItemClick={props.onItemClick}/>
+                return <ListItem key={i} item={elem} onItemClick={props.onItemClick}/>
             })}
         </div>
     )

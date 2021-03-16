@@ -7,10 +7,18 @@ import "./App.css";
 
 // let styles = require("./App.css");
 
+export interface User{
+    name : string;
+    address : string;
+    birthday : Date; // string or Date - date works fine with the data coming from faker!
+    email : string;
+    phone : string;
+}
+
 export const App = () => {
 
-    const [info, setInfo] = useState([]);
-    const [selected, setSelected] = useState(null);
+    const [info, setInfo] = useState<User[]>([]);
+    const [selected, setSelected] = useState<User>(null);
 
    useEffect(() => {
        new Promise((resolve, reject) => {
@@ -41,7 +49,6 @@ export const App = () => {
 
     const handleItemSelect = (item) => {
        setSelected(item);
-        console.log(item)
     }
 
   return (
