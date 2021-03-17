@@ -12,7 +12,7 @@ import {v4 as uuidv4} from "uuid";
 export interface User{
     name : string;
     address : string;
-    birthday : string; // string or Date - date works fine with the data coming from faker but the date picker needs a different format!
+    birthday : string; // string or Date - date works fine with the data coming from faker but the date picker needs and outputs a different format!
     email : string;
     phone : string;
     id : string;
@@ -92,11 +92,14 @@ export const App = () => {
 
   return (
     <div className="mainContainer">
+        <div>
         {
             info.length != 0 ? (
                 <Masterlist info={info} onItemClick={handleItemSelect}/>
                 ) : null
         }
+        </div>
+        <div>
         {
             selected ? (
                 editing ? (
@@ -106,6 +109,7 @@ export const App = () => {
                         )
             ) : null
         }
+        </div>
     </div>
   )
 }
