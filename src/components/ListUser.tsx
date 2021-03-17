@@ -17,15 +17,16 @@ const ListUser : React.FC<Props> = (props) => {
     let {item, onItemClick} = props;
 
     return (
-        <ListItem button onClick={() => {onItemClick(item)}}>
+        <ListItem button onClick={() => {onItemClick(item)}} className="userContact">
             <ListItemIcon>
                 <AccountCircleRoundedIcon />
             </ListItemIcon>
-            <ListItemText primary={item.name} />
+            {item.name? (
+                <ListItemText primary={item.name} />
+            ) : (
+                <ListItemText primary="Unknown" style={{color: "lightgrey"}}/>
+            )}
         </ListItem>
-        // <MenuItem className={classes.root} onClick={() => {onItemClick(item)}}>
-        //     {item.name}
-        // </MenuItem>
     )
 }
 

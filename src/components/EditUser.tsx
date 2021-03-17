@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import * as moment from 'moment';
 import {TextField} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
+import {useState} from "react";
 
 interface Props{
     item: User;
@@ -17,6 +18,9 @@ interface Props{
 }
 
 export default function EditUser(props: Props){
+
+    const [disableSave, setDisableSave] = useState<boolean>(false)
+
     let {item, handleEditSubmission, handleCancelEdit} = props;
 
     let cardStyles = {
@@ -25,33 +29,50 @@ export default function EditUser(props: Props){
         minWidth: 360,
     }
 
+    const onNameChanged = (e) => {
+        if(e.target.value == "") setDisableSave(true);
+        else setDisableSave(false);
+    }
+
     return(
-        <Card style={cardStyles} elevation={20} >
+        <Card style={cardStyles} elevation={20} className="editUserCard" >
             <form onSubmit={handleEditSubmission}>
             <CardContent>
                 <Typography variant="overline" >Name:</Typography> <br/>
-                <TextField name="name" defaultValue={item.name} style={{width: "90%"}}/> <br/>
+                <TextField name="name" defaultValue={item.name} style={{width: "90%"}} onChange={onNameChanged} id="editUserName"/> <br/>
                 <Typography variant="overline">Address:</Typography> <br/>
-                <TextField name="address" defaultValue={item.address} style={{width: "90%"}}/> <br/>
+                <TextField name="address" defaultValue={item.address} style={{width: "90%"}} id="editAddressName"/> <br/>
                 <Typography variant="overline" >Birthday</Typography> <br/>
                 <TextField
                     name="birthday"
                     type="date"
                     defaultValue={moment(item.birthday).format("YYYY-MM-DD")}
-                    style={{width: "90%"}}/> <br/>
+                    style={{width: "90%"}}
+                    id="editBirthdayName"/> <br/>
                 <Typography variant="overline">Email:</Typography> <br/>
-                <TextField name="email" defaultValue={item.email} style={{width: "90%"}}/> <br/>
+                <TextField name="email" defaultValue={item.email} style={{width: "90%"}} id="editEmailName"/> <br/>
                 <Typography variant="overline">Phone:</Typography> <br/>
-                <TextField name="phone" defaultValue={item.phone} style={{width: "90%"}}/>
+                <TextField name="phone" defaultValue={item.phone} style={{width: "90%"}} id="editPhoneName"/>
             </CardContent>
                 <CardActions style={{display: "flex", justifyContent: "center"}}>
-                <Button type="submit" variant="contained" color="primary" size="small" startIcon={<SaveIcon/>}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    startIcon={<SaveIcon/>}
+                    disabled={disableSave}
+                    >
                     Save
                 </Button>
             </CardActions>
             </form>
             <CardActions style={{display: "flex", justifyContent: "center"}}>
-                <Button variant="contained" size="small" startIcon={<DeleteIcon />} onClick={handleCancelEdit}>
+                <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<DeleteIcon />}
+                    onClick={handleCancelEdit}>
                     Cancel
                 </Button>
             </CardActions>

@@ -3,9 +3,10 @@ import {useEffect, useState} from "react";
 import * as faker from "faker"
 import Masterlist from "./components/Masterlist";
 import DetailedView from "./components/DetailedView";
-import "./App.css";
 import EditUser from "./components/EditUser";
 import {v4 as uuidv4} from "uuid";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 // let styles = require("./App.css");
 
@@ -23,37 +24,60 @@ export const App = () => {
     const [info, setInfo] = useState<User[]>([]);
     const [selected, setSelected] = useState<User>(null);
     const [editing, setEditing] =useState<boolean>(false);
+    const [dataFetchComplete, setDataFetchComplete] = useState<boolean>(false);
+    const [dataFetchFailed, setDataFetchFailed] = useState<boolean>(false);
 
    useEffect(() => {
        new Promise((resolve, reject) => {
-           setTimeout(()=> {
-               let dataArray = [];
-
-               for(let i=0; i<25; i++){
-                   let item = {
-                       name: faker.fake("{{name.firstName}} {{name.lastName}}"),
-                       address: faker.fake("{{address.streetAddress}}"),
-                       birthday: faker.fake("{{date.past}}"),
-                       email: faker.fake("{{internet.email}}"),
-                       phone: faker.fake("{{phone.phoneNumber}}"),
-                       id: uuidv4()
-                   }
-                   dataArray.push(item);
-               }
-               resolve(dataArray)
-           }, 1000)
+           getUserData(resolve, reject)
        })
            .then((data : User[])=> {
-                setInfo(data);
+               setInfo(data);
+               setDataFetchComplete(true);
            })
            .catch(err => {
                console.log(err)
+               setDataFetchComplete(true);
+               setDataFetchFailed(true)
            })
    }, [])
 
+    function getUserData(resolve, reject) {
+        setTimeout(() => {
+            let dataArray = [];
+
+            for (let i = 0; i < 5; i++) {
+                let item = {
+                    name: faker.fake("{{name.firstName}} {{name.lastName}}"),
+                    address: faker.fake("{{address.streetAddress}}"),
+                    birthday: faker.fake("{{date.past}}"),
+                    email: faker.fake("{{internet.email}}"),
+                    phone: faker.fake("{{phone.phoneNumber}}"),
+                    id: uuidv4()
+                }
+                dataArray.push(item);
+            }
+            resolve(dataArray)
+            // reject()
+        }, 1000)
+    }
+
+    const handleMoreUsers = () => {
+        new Promise((resolve, reject) => {
+            getUserData(resolve, reject);
+        })
+            .then((data : User[])=> {
+                let newInfo = [...info, ...data]
+                setInfo(newInfo);
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     const handleItemSelect = (item:User) => {
        setSelected(item);
+       if(editing) setEditing(false);
     }
 
     const handleEditClicked = () => {
@@ -91,15 +115,18 @@ export const App = () => {
     }
 
   return (
-    <div className="mainContainer">
-        <div>
+    <div id="mainContainer" style={{display: "flex"}}>
+        <div id="masterListContainer" >
         {
             info.length != 0 ? (
-                <Masterlist info={info} onItemClick={handleItemSelect}/>
-                ) : null
+                <Masterlist info={info} onItemClick={handleItemSelect} onAddUsers={handleMoreUsers}/>
+            ) : (dataFetchComplete ? (
+                dataFetchFailed ?
+                    (<div>Failed to load users</div>) : (<div>No contacts</div>)
+                ) : (<CircularProgress id="loadingIndicator" />))
         }
         </div>
-        <div>
+        <div id="detailedViewContainer">
         {
             selected ? (
                 editing ? (
@@ -113,3 +140,11 @@ export const App = () => {
     </div>
   )
 }
+
+/***
+ * four cases as to whether the app can display data:
+ * 1. data fetch was completed correctly and the contacts can be displayed
+ * 2. data fetch is still in progress > display progress
+ * 3. data fetch was correctly completed but there are no contacts to display
+ * 4. data fetch failed
+ */

@@ -24,18 +24,18 @@ export default function DetailedView(props: Props) {
     }
 
     return (
-        <Card style={cardStyles} elevation={20}>
+        <Card style={cardStyles} elevation={20} className="detailViewCard" >
             <CardContent>
                 <Typography variant="overline" >Name:</Typography>
-                <Typography variant="h4">{item.name}</Typography>
+                <Typography variant="h4" id="userNameDetailed">{item.name}</Typography>
                 <Typography variant="overline">Address:</Typography>
-                <Typography variant="body1">{item.address}</Typography>
-                <Typography variant="overline">Birthday</Typography>
-                <Typography variant="body1">{moment(item.birthday).format("LL")}</Typography>
+                <Typography variant="body1" id="userAddressDetailed">{item.address}</Typography>
+                <Typography variant="overline" >Birthday</Typography>
+                <Typography variant="body1" id="userBirthdayDetailed">{moment(item.birthday).format("LL")}</Typography>
                 <Typography variant="overline">Email:</Typography>
-                <Typography variant="body1">{item.email}</Typography>
+                <Typography variant="body1" id="userEmailDetailed">{item.email}</Typography>
                 <Typography variant="overline">Phone:</Typography>
-                <Typography variant="body1">{item.phone}</Typography>
+                <Typography variant="body1" id="userPhoneDetailed">{item.phone}</Typography>
             </CardContent>
             <CardActions style={{display: "flex", justifyContent: "center"}}>
                 <Button
