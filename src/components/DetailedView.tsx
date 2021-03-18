@@ -7,6 +7,8 @@ import CardActions from "@material-ui/core/CardActions";
 import EditIcon from '@material-ui/icons/Edit';
 import Button from "@material-ui/core/Button";
 import * as moment from 'moment';
+import {useContext} from "react";
+import NameContext from "../NameContext";
 
 
 interface Props {
@@ -16,6 +18,10 @@ interface Props {
 
 export default function DetailedView(props: Props) {
     let {item, handleEditClicked} = props;
+
+    const nameStyle = useContext(NameContext);
+
+    let nameSwapped = item.name.split(" ").reverse().join(", ")
 
     let cardStyles = {
         marginLeft: 10,
@@ -27,15 +33,19 @@ export default function DetailedView(props: Props) {
         <Card style={cardStyles} elevation={20} className="detailViewCard" >
             <CardContent>
                 <Typography variant="overline" >Name:</Typography>
-                <Typography variant="h4" id="userNameDetailed">{item.name}</Typography>
+                <Typography
+                    variant="h4"
+                    id="userNameDetailed">
+                    {item.name ? ( nameStyle == "first-last" ? item.name : nameSwapped) : "Unknown"}
+                </Typography>
                 <Typography variant="overline">Address:</Typography>
-                <Typography variant="body1" id="userAddressDetailed">{item.address}</Typography>
+                <Typography variant="body1" id="userAddressDetailed">{item.address ? item.address : "Unknown"}</Typography>
                 <Typography variant="overline" >Birthday</Typography>
-                <Typography variant="body1" id="userBirthdayDetailed">{moment(item.birthday).format("LL")}</Typography>
+                <Typography variant="body1" id="userBirthdayDetailed">{item.birthday ? moment(item.birthday).format("LL") : "Unknown"}</Typography>
                 <Typography variant="overline">Email:</Typography>
-                <Typography variant="body1" id="userEmailDetailed">{item.email}</Typography>
+                <Typography variant="body1" id="userEmailDetailed">{item.email ? item.email : "Unknown"}</Typography>
                 <Typography variant="overline">Phone:</Typography>
-                <Typography variant="body1" id="userPhoneDetailed">{item.phone}</Typography>
+                <Typography variant="body1" id="userPhoneDetailed">{item.phone ? item.phone : "Unknown"}</Typography>
             </CardContent>
             <CardActions style={{display: "flex", justifyContent: "center"}}>
                 <Button

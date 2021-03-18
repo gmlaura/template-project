@@ -41,18 +41,18 @@ export default function EditUser(props: Props){
                 <Typography variant="overline" >Name:</Typography> <br/>
                 <TextField name="name" defaultValue={item.name} style={{width: "90%"}} onChange={onNameChanged} id="editUserName"/> <br/>
                 <Typography variant="overline">Address:</Typography> <br/>
-                <TextField name="address" defaultValue={item.address} style={{width: "90%"}} id="editAddressName"/> <br/>
+                <TextField name="address" defaultValue={item.address} style={{width: "90%"}} id="editUserAddress"/> <br/>
                 <Typography variant="overline" >Birthday</Typography> <br/>
                 <TextField
                     name="birthday"
                     type="date"
                     defaultValue={moment(item.birthday).format("YYYY-MM-DD")}
                     style={{width: "90%"}}
-                    id="editBirthdayName"/> <br/>
+                    id="editUserBirthday"/> <br/>
                 <Typography variant="overline">Email:</Typography> <br/>
-                <TextField name="email" defaultValue={item.email} style={{width: "90%"}} id="editEmailName"/> <br/>
+                <TextField name="email" defaultValue={item.email} style={{width: "90%"}} id="editUserEmail"/> <br/>
                 <Typography variant="overline">Phone:</Typography> <br/>
-                <TextField name="phone" defaultValue={item.phone} style={{width: "90%"}} id="editPhoneName"/>
+                <TextField name="phone" defaultValue={item.phone} style={{width: "90%"}} id="editUserPhone"/>
             </CardContent>
                 <CardActions style={{display: "flex", justifyContent: "center"}}>
                 <Button
@@ -62,6 +62,7 @@ export default function EditUser(props: Props){
                     size="small"
                     startIcon={<SaveIcon/>}
                     disabled={disableSave}
+                    id="saveButton"
                     >
                     Save
                 </Button>
@@ -72,7 +73,8 @@ export default function EditUser(props: Props){
                     variant="contained"
                     size="small"
                     startIcon={<DeleteIcon />}
-                    onClick={handleCancelEdit}>
+                    onClick={handleCancelEdit}
+                    id={"cancelButton"}>
                     Cancel
                 </Button>
             </CardActions>

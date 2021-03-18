@@ -1,14 +1,13 @@
 import * as React from 'react'
-import {useEffect, useState} from "react";
+import {useEffect, useState, createContext} from "react";
 import * as faker from "faker"
 import Masterlist from "./components/Masterlist";
 import DetailedView from "./components/DetailedView";
 import EditUser from "./components/EditUser";
 import {v4 as uuidv4} from "uuid";
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-
-// let styles = require("./App.css");
+import SettingMenu from "./components/SettingsMenu";
+import NameContext from "./NameContext";
 
 export interface User{
     name : string;
@@ -26,6 +25,7 @@ export const App = () => {
     const [editing, setEditing] =useState<boolean>(false);
     const [dataFetchComplete, setDataFetchComplete] = useState<boolean>(false);
     const [dataFetchFailed, setDataFetchFailed] = useState<boolean>(false);
+    const [nameStyle, setNameStyle] = useState<string>("first-last")
 
    useEffect(() => {
        new Promise((resolve, reject) => {
@@ -114,29 +114,38 @@ export const App = () => {
        setEditing(false);
     }
 
+    const handleNameStyleChange = (e) => {
+        setNameStyle(e.target.value);
+    }
+
   return (
-    <div id="mainContainer" style={{display: "flex"}}>
-        <div id="masterListContainer" >
-        {
-            info.length != 0 ? (
-                <Masterlist info={info} onItemClick={handleItemSelect} onAddUsers={handleMoreUsers}/>
-            ) : (dataFetchComplete ? (
-                dataFetchFailed ?
-                    (<div>Failed to load users</div>) : (<div>No contacts</div>)
-                ) : (<CircularProgress id="loadingIndicator" />))
-        }
+    <div id="mainContainer" style={{display: "flex", flexDirection:"column"}}>
+        <NameContext.Provider value={nameStyle}>
+        <SettingMenu handleStyleChange={handleNameStyleChange}/>
+        <div id="infoContainers" style={{display: "flex"}}>
+            <div id="masterListContainer" >
+            {
+                info.length != 0 ? (
+                    <Masterlist info={info} onItemClick={handleItemSelect} onAddUsers={handleMoreUsers}/>
+                ) : (dataFetchComplete ? (
+                    dataFetchFailed ?
+                        (<div>Failed to load users</div>) : (<div>No contacts</div>)
+                    ) : (<CircularProgress id="loadingIndicator" />))
+            }
+            </div>
+            <div id="detailedViewContainer">
+            {
+                selected ? (
+                    editing ? (
+                        <EditUser item={selected} handleEditSubmission={handleEditSubmission} handleCancelEdit={handleCancelEdit} />
+                        ) : (
+                            <DetailedView item={selected} handleEditClicked={handleEditClicked}/>
+                            )
+                ) : null
+            }
+            </div>
         </div>
-        <div id="detailedViewContainer">
-        {
-            selected ? (
-                editing ? (
-                    <EditUser item={selected} handleEditSubmission={handleEditSubmission} handleCancelEdit={handleCancelEdit} />
-                    ) : (
-                        <DetailedView item={selected} handleEditClicked={handleEditClicked}/>
-                        )
-            ) : null
-        }
-        </div>
+        </NameContext.Provider>
     </div>
   )
 }
@@ -148,3 +157,4 @@ export const App = () => {
  * 3. data fetch was correctly completed but there are no contacts to display
  * 4. data fetch failed
  */
+
