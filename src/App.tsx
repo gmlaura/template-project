@@ -90,7 +90,7 @@ export const App = () => {
        let {name, address, birthday, email, phone} = e.target;
 
        let editedUser = {
-           name: name.value,
+           name: name.value.trim(),
            address: address.value,
            birthday: birthday.value,
            email: email.value,
@@ -121,7 +121,7 @@ export const App = () => {
   return (
     <div id="mainContainer" style={{display: "flex", flexDirection:"column"}}>
         <NameContext.Provider value={nameStyle}>
-        <SettingMenu handleStyleChange={handleNameStyleChange}/>
+        <SettingMenu handleStyleChange={handleNameStyleChange} />
         <div id="infoContainers" style={{display: "flex"}}>
             <div id="masterListContainer" >
             {

@@ -54,6 +54,7 @@ export default function DetailedView(props: Props) {
                     size="small"
                     onClick={handleEditClicked}
                     startIcon={<EditIcon/>}
+                    id="editButton"
                 >
                     Edit
                 </Button>

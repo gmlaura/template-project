@@ -27,6 +27,14 @@ describe('App', () => {
     cy.get(".masterList")
   })
 
+    it("should load name style settings menu", function(){
+        mount(
+            <App />
+        )
+
+        cy.get("#settingsMenu")
+    })
+
   // Interaction
 
   // You can click on a list entry to display correct detail view
@@ -62,16 +70,16 @@ describe('App', () => {
     cy.get(".userContact")
         .first()
         .click()
-        .get(".detailViewCard")
+        // .get(".detailViewCard")
         .get("#userNameDetailed")
         .then(x => {
           userName = x.text();
 
           // why does this block of code only work in here while in the previous test it worked outside the then block?
-          cy.get("button")
+          cy.get("#editButton")
               .click()
-              .get(".editUserCard")
-              .get("#editUserName")
+
+            cy.get("#editUserName")
               .should("have.value", userName )
         })
 
@@ -91,33 +99,37 @@ describe('App', () => {
     cy.get(".userContact")
         .first()
         .click()
-        .get(".detailViewCard")
         .get("h4")
         .then(x => {
           userName = x.text();
         })
-        .get("#userAddressDetailed")
+
+      cy.get("#userAddressDetailed")
         .then(x => {
           userAddress = x.text();
         })
-        .get("button")
+
+      cy.get("#editButton")
         .click()
-        .get(".editUserCard")
         .get("#editUserName")
         .type('{selectall}{backspace}')
         .type("John Smith")
-        .get("button")
+
+      cy.get("#saveButton")
         .first()
         .click()
-        .get("#UserNameDetailed")
+
+      cy.get("#UserNameDetailed")
         .should(x => {
           expect(x.text()).to.not.equal(userName)
         })
-        .get("#userNameDetailed")
+
+      cy.get("#userNameDetailed")
         .should(x => {
             expect(x.text()).to.equal("John Smith")
         })
-        .get("#userAddressDetailed")
+
+      cy.get("#userAddressDetailed")
         .should(x => {
           expect(x.text()).to.equal(userAddress)
         })
@@ -140,7 +152,8 @@ describe('App', () => {
                 cy.get(".userContact")
                     .eq(3)
                     .click()
-                    .get("h4")
+
+                cy.get("h4")
                     .should(x => {
                         expect(x.text()).to.not.equal(userName)
                     })
@@ -157,16 +170,20 @@ describe('App', () => {
         cy.get(".userContact")
             .first()
             .click()
-            .get("button")
+
+        cy.get("#editButton")
             .click()
-            .get("#editUserName")
+
+
+        cy.get("#editUserName")
             .then(x => {
                 userName = x.text();
 
                 cy.get(".userContact")
                     .eq(3)
                     .click()
-                    .get("h4")
+
+                cy.get("h4")
                     .should(x=>{
                         expect(x.text()).to.not.equal(userName)
                     })
@@ -186,17 +203,22 @@ describe('App', () => {
             .then(x =>{
                 userName = x.text()
 
-                cy.get("button")
+                cy.get("#editButton")
                     .click()
-                    .get("#editUserName")
+
+                cy.get("#editUserName")
                     .type("John Smith")
-                    .get(".userContact")
+
+
+                cy.get(".userContact")
                     .eq(2)
                     .click()
-                    .get(".userContact")
+
+                cy.get(".userContact")
                     .first()
                     .click()
-                    .get("h4")
+
+                cy.get("h4")
                     .should(x=>{
                         expect(x.text()).to.not.equal("John Smith")
                     })
@@ -216,17 +238,21 @@ describe('App', () => {
         cy.get(".userContact")
             .eq(2)
             .click()
-            .get("h4")
+
+        cy.get("h4")
             .then(x => {
                 userName = x.text()
 
-                cy.get("button")
+                cy.get("#editButton")
                     .click()
-                    .get("#editUserName")
+
+                cy.get("#editUserName")
                     .type("Bob Smith")
-                    .get("#cancelButton")
+
+                cy.get("#cancelButton")
                     .click()
-                    .get("h4")
+
+                cy.get("h4")
                     .should(x => {
                         expect(x.text()).to.equal(userName)
                     })
@@ -247,17 +273,137 @@ describe('App', () => {
         cy.get(".userContact")
             .eq(1)
             .click()
-            .get("h4")
+
+        cy.get("h4")
             .then(x => {
                 userName = x.text();
 
                 cy.get(".userContact")
                     .eq(1)
                     .click()
-                    .get("h4")
+
+                cy.get("h4")
                     .should(x=>{
                         expect(x.text()).to.equal(userName)
                     })
+            })
+    })
+
+    it("first-last should be the default value of name style preferences", () => {
+        mount(
+            <App />
+        )
+
+        cy.get("#nameSettingsGroup :checked")
+            .should("be.checked")
+            .and("have.value", "first-last")
+
+    })
+
+    it("should be able to change the name style preference", () => {
+        mount(
+            <App />
+        )
+
+        cy.get('[type="radio"]').check('last-first')
+
+        cy.get("#nameSettingsGroup :checked")
+            .should("be.checked")
+            .and("have.value", "last-first")
+
+        cy.get('[type="radio"]').check('first-last')
+
+        cy.get("#nameSettingsGroup :checked")
+            .should("be.checked")
+            .and("have.value", "first-last")
+    })
+
+    it("name format should be first-last when the option is selected", ()=>{
+        mount(
+            <App />
+        )
+
+        cy.get("#nameSettingsGroup :checked")
+            .should("be.checked")
+            .and("have.value", "first-last")
+
+        cy.get(".userContact")
+            .each(x => {
+                if(x.text().includes(" ")){
+                    expect(x.text()).to.not.contain(", ");
+                }
+            })
+    })
+
+    it("name format should be last-first when the option is selected", ()=>{
+        mount(
+            <App />
+        )
+
+        cy.get('[type="radio"]').check('last-first')
+
+
+        cy.get(".userContact")
+            .each(x => {
+                if(x.text().includes(" ")){
+                    expect(x.text()).to.contain(", ");
+                }
+            })
+    })
+
+    it("names should not have leading or trailing whitespaces", ()=>{
+        mount(
+            <App />
+        )
+
+        cy.get(".userContact")
+            .eq(2)
+            .click()
+
+        cy.get("#editButton")
+            .click()
+
+        cy.get("#editUserName")
+            .type("{selectall}{backspace}John ")
+
+        cy.get("#saveButton")
+            .click();
+
+        cy.get(".userContact")
+            .eq(2)
+            .click()
+
+        cy.get("h4")
+            .then(x => {
+                expect(x.text()).to.not.contain(" ")
+            })
+    })
+
+    it("names with only first or last name should not have commas", ()=> {
+        mount(
+            <App />
+        )
+
+        cy.get('[type="radio"]').check('last-first')
+
+        cy.get(".userContact")
+            .eq(2)
+            .click()
+
+        cy.get("#editButton")
+            .click()
+
+        cy.get("#editUserName")
+            .type("{selectall}{backspace}John ")
+
+        cy.get("#saveButton")
+            .click();
+
+        cy.get(".userContact")
+            .each(x => {
+                if(!x.text().includes(" ")){
+                    expect(x.text()).to.not.contain(",")
+                }
             })
     })
 })

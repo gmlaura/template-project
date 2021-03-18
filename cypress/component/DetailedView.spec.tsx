@@ -41,19 +41,23 @@ describe("DetailedView", () =>{
             .should(x=> {
                 expect(x.text()).to.equal("Unknown")
             })
-            .get("#userAddressDetailed")
+
+        cy.get("#userAddressDetailed")
             .should(x=> {
                 expect(x.text()).to.equal("Unknown")
             })
-            .get("#userBirthdayDetailed")
+
+        cy.get("#userBirthdayDetailed")
             .should(x=> {
                 expect(x.text()).to.equal("Unknown")
             })
-            .get("#userEmailDetailed")
+
+        cy.get("#userEmailDetailed")
             .should(x=> {
                 expect(x.text()).to.equal("Unknown")
             })
-            .get("#userPhoneDetailed")
+
+        cy.get("#userPhoneDetailed")
             .should(x=> {
                 expect(x.text()).to.equal("Unknown")
             })

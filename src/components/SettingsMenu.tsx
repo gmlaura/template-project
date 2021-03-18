@@ -16,9 +16,9 @@ const SettingMenu : React.FC<Props> = (props) => {
     const nameStyle = useContext(NameContext);
 
     return (
-        <div id="settingMenu" style={{margin: 10}}>
+        <div id="settingsMenu" style={{margin: 10}}>
             <Typography variant="overline" >Select name style:</Typography> <br/>
-            <RadioGroup onChange={handleStyleChange} value={nameStyle}>
+            <RadioGroup onChange={handleStyleChange} value={nameStyle} id="nameSettingsGroup">
                 <FormControlLabel value="first-last" control={<Radio color="primary"/>} label="First Last" />
                 <FormControlLabel value="last-first" control={<Radio color="primary"/>} label="Last, First" />
             </RadioGroup>

@@ -50,11 +50,14 @@ describe("EditUser", () => {
 
         cy.get("#editUserAddress")
             .type("{selectall}{backspace}")
-            .get("#editUserEmail")
+
+        cy.get("#editUserEmail")
             .type("{selectall}{backspace}")
-            .get("#editUserPhone")
+
+        cy.get("#editUserPhone")
             .type("{selectall}{backspace}")
-            .get("#saveButton")
+
+        cy.get("#saveButton")
             .should("not.be.disabled")
     })
 
@@ -65,17 +68,23 @@ describe("EditUser", () => {
 
         cy.get("#cancelButton")
             .should("not.be.disabled")
-            .get("#editUserName")
+
+        cy.get("#editUserName")
             .type("{selectall}{backspace}")
-            .get("#cancelButton")
+
+        cy.get("#cancelButton")
             .should("not.be.disabled")
-            .get("#editUserAddress")
+
+        cy.get("#editUserAddress")
             .type("{selectall}{backspace}")
-            .get("#editUserEmail")
+
+        cy.get("#editUserEmail")
             .type("{selectall}{backspace}")
-            .get("#editUserPhone")
+
+        cy.get("#editUserPhone")
             .type("{selectall}{backspace}")
-            .get("#cancelButton")
+
+        cy.get("#cancelButton")
             .should("not.be.disabled")
     })
 
