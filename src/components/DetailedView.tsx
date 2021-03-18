@@ -21,7 +21,9 @@ export default function DetailedView(props: Props) {
 
     const nameStyle = useContext(NameContext);
 
-    let nameSwapped = item.name.split(" ").reverse().join(", ")
+    let styledName : string;
+    if(nameStyle == "last-first") styledName = item.name.split(" ").reverse().join(", ")
+    else styledName = item.name
 
     let cardStyles = {
         marginLeft: 10,
@@ -36,7 +38,7 @@ export default function DetailedView(props: Props) {
                 <Typography
                     variant="h4"
                     id="userNameDetailed">
-                    {item.name ? ( nameStyle == "first-last" ? item.name : nameSwapped) : "Unknown"}
+                    {item.name ? styledName : "Unknown"}
                 </Typography>
                 <Typography variant="overline">Address:</Typography>
                 <Typography variant="body1" id="userAddressDetailed">{item.address ? item.address : "Unknown"}</Typography>

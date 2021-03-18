@@ -18,7 +18,9 @@ const ListUser : React.FC<Props> = (props) => {
 
     const nameStyle = useContext(NameContext);
 
-    let nameSwapped = item.name.split(" ").reverse().join(", ")
+    let name : string;
+    if(nameStyle == "last-first") name = item.name.split(" ").reverse().join(", ")
+    else name = item.name
 
     return (
         <ListItem button onClick={() => {onItemClick(item)}} className="userContact">
@@ -26,10 +28,7 @@ const ListUser : React.FC<Props> = (props) => {
                 <AccountCircleRoundedIcon />
             </ListItemIcon>
             {item.name? (
-                nameStyle == "first-last" ? (<ListItemText primary={item.name} />) : (
-                    <ListItemText primary={nameSwapped} />
-                )
-
+                <ListItemText primary={name} />
             ) : (
                 <ListItemText primary="Unknown" style={{color: "lightgrey"}}/>
             )}
