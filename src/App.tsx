@@ -8,6 +8,7 @@ import {v4 as uuidv4} from "uuid";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SettingMenu from "./components/SettingsMenu";
 import NameContext from "./NameContext";
+import FilterInput from "./components/FilterInput";
 
 export interface User{
     name : string;
@@ -21,6 +22,7 @@ export interface User{
 export const App = () => {
 
     const [info, setInfo] = useState<User[]>([]);
+    const [filtered, setFiltered] = useState<User[]>([]);
     const [selected, setSelected] = useState<User>(null);
     const [editing, setEditing] =useState<boolean>(false);
     const [dataFetchComplete, setDataFetchComplete] = useState<boolean>(false);
@@ -33,6 +35,7 @@ export const App = () => {
        })
            .then((data : User[])=> {
                setInfo(data);
+               setFiltered(data);
                setDataFetchComplete(true);
            })
            .catch(err => {
@@ -69,6 +72,7 @@ export const App = () => {
             .then((data : User[])=> {
                 let newInfo = [...info, ...data]
                 setInfo(newInfo);
+                setFiltered(newInfo);
             })
             .catch(err => {
                 console.log(err)
@@ -105,8 +109,15 @@ export const App = () => {
            return x;
        })
 
+        let newFiltered = filtered.map(x => {
+            if(selected.id === x.id){
+                return editedUser;
+            }
+            return x;
+        })
         setSelected(editedUser);
         setInfo(newInfo);
+        setFiltered(newFiltered);
         setEditing(false);
     }
 
@@ -118,15 +129,74 @@ export const App = () => {
         setNameStyle(e.target.value);
     }
 
+    function genericFilter<T>(object: T, properties: Array<keyof T>, query: string):boolean{
+        if(query === "") return true
+
+        const checks = properties.map(prop => {
+            const value = object[prop];
+            if(typeof value === "string" || typeof value === "number"){
+                return value.toString().toLowerCase().includes(query);
+            }
+            return false;
+        })
+
+        return checks.includes(true);
+    }
+
+    function genericNameFilter<T>(object: T, property: keyof T, query: string):boolean{
+        if(query === "") return true
+
+        const value = object[property];
+        if(typeof value === "string" || typeof value === "number"){
+            return value.toString().toLowerCase().includes(query);
+        }
+        return false;
+    }
+
+    const handleFilter = (e) => {
+        let query = e.target.value.toLowerCase();
+
+        if (query === "") setFiltered(info);
+        else {
+            let properties : Array<keyof User> = ["name",
+                "address",
+                "birthday",
+                "email",
+                "phone",
+                "id"];
+
+            let filteredInfo = info.filter(user => {
+                return genericFilter<User>(user, properties, query)
+            })
+
+            setFiltered(filteredInfo);
+        }
+    }
+
+    const handleNameFilter = (e)=> {
+        let query = e.target.value.toLowerCase();
+
+        if (query === "") setFiltered(info);
+        else{
+            let filteredInfo = info.filter(user => {
+                return genericNameFilter<User>(user, "name", query);
+            })
+
+            setFiltered(filteredInfo);
+        }
+    }
+
+
   return (
     <div id="mainContainer" style={{display: "flex", flexDirection:"column"}}>
         <NameContext.Provider value={nameStyle}>
         <SettingMenu handleStyleChange={handleNameStyleChange} />
+        <FilterInput onFilter={handleFilter} onNameFilter={handleNameFilter}/>
         <div id="infoContainers" style={{display: "flex"}}>
             <div id="masterListContainer" >
             {
                 info.length != 0 ? (
-                    <Masterlist info={info} onItemClick={handleItemSelect} onAddUsers={handleMoreUsers}/>
+                    <Masterlist info={filtered} onItemClick={handleItemSelect} onAddUsers={handleMoreUsers}/>
                 ) : (dataFetchComplete ? (
                     dataFetchFailed ?
                         (<div>Failed to load users</div>) : (<div>No contacts</div>)
